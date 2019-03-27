@@ -28,7 +28,7 @@ abstract AbstractInstaller
      *
      * @return array
      */
-    public function replace(array $map, string $subject) : string
+    public static function replace(array $map, string $subject) : string
     {
         // Loop over the values
         foreach ($map as $from => $to) {

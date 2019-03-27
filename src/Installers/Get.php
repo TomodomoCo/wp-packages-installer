@@ -11,10 +11,7 @@ class Get extends AbstractInstaller implements InstallerInterface
      */
     public function getDownloadUrl() : string
     {
-        // Get the URL
-        $url = $this->config['url'];
-
-        // Run a replacement with the auth values
-        return $this->replace($this->auth, $url);
+        // Get the URL and run a replacement with the auth values
+        return static::replace($this->auth, $this->config['url']);
     }
 }

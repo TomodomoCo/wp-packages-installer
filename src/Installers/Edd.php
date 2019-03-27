@@ -18,7 +18,7 @@ class Edd extends AbstractInstaller implements InstallerInterface
 		// Send a request to the EDD endpoing
 		$response = $http->request(
 			'post',
-			$this->config['url'],
+			$this->config['endpoint'],
 			[
 				'form_params' => $requestBody,
 			],

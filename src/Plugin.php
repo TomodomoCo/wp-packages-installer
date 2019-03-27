@@ -18,22 +18,28 @@ use Tomodomo\Packages\Installer\Framework\RemoteFilesystem;
 class Plugin implements PluginInterface, EventSubscriberInterface
 {
     /**
+     * The Composer instance.
+     *
      * @var Composer
      */
     protected $composer;
 
     /**
+     * The IO interface.
+     *
      * @var IOInterface
      */
     protected $io;
 
     /**
+     * The modified download URL.
+     *
      * @var string
      */
     protected $downloadUrl;
 
     /**
-     * Activate plugin.
+     * Activate the plugin.
      *
      * @param Composer    $composer
      * @param IOInterface $io
@@ -50,7 +56,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface
     }
 
     /**
-     * Set subscribed events.
+     * Subscribe to certain events.
      *
      * @return array
      */
@@ -64,7 +70,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface
     }
 
     /**
-     * Get package from operation.
+     * Get the package that is being installed or updated.
      *
      * @param OperationInterface $operation
      *
@@ -80,7 +86,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface
     }
 
     /**
-     * Get download URL for our plugins.
+     * Get the download URL for the package.
      *
      * @param PackageEvent $event
      *
@@ -91,6 +97,8 @@ class Plugin implements PluginInterface, EventSubscriberInterface
         // Get the package and package name
         $composerPackage     = $this->getPackageFromOperation($event->getOperation());
         $composerPackageName = $package->getName();
+
+        // @todo May need to have a way here to validate that we should act on the package.
 
         // Set up our representation of the package
         $package       = new Package($composerPackage);

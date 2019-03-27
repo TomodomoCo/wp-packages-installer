@@ -11,8 +11,8 @@ class PostSerialized extends AbstractInstaller implements InstallerInterface
      */
     public function getDownloadUrl() : string
     {
-        // Get the URL
-        $url = $this->replace($this->auth, $this->config['url']);
+        // Get the URL and run a replacement with the auth values
+        $url = static::replace($this->auth, $this->config['endpoint']);
 
 		// Build a new Guzzle client
 		$http = new \GuzzleHttp\Client();
