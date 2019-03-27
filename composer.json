@@ -1,5 +1,5 @@
 {
-  "name": "tomodomo/composer-wp-packages-installer",
+  "name": "tomodomo/wp-packages-installer",
   "type": "composer-plugin",
   "version": "1.0.0-beta.1",
   "require": {
