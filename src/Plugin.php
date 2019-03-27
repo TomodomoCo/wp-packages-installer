@@ -3,20 +3,33 @@
 namespace Tomodomo\Packages\Installer;
 
 use Composer\Composer;
-use Composer\EventDispatcher\EventSubscriberInterface;
 use Composer\DependencyResolver\Operation\OperationInterface;
-use Composer\IO\IOInterface;
-use Composer\Plugin\PluginInterface;
+use Composer\EventDispatcher\EventSubscriberInterface;
 use Composer\Installer\PackageEvent;
 use Composer\Installer\PackageEvents;
+use Composer\IO\IOInterface;
+use Composer\Package\PackageInterface as ComposerPackageInterface;
 use Composer\Plugin\PluginEvents;
+use Composer\Plugin\PluginInterface;
 use Composer\Plugin\PreFileDownloadEvent;
+use Tomodomo\Packages\Installer\Framework\Package;
+use Tomodomo\Packages\Installer\Framework\RemoteFilesystem;
 
-class Installer implements PluginInterface, EventSubscriberInterface
+class Plugin implements PluginInterface, EventSubscriberInterface
 {
-
+    /**
+     * @var Composer
+     */
     protected $composer;
+
+    /**
+     * @var IOInterface
+     */
     protected $io;
+
+    /**
+     * @var string
+     */
     protected $downloadUrl;
 
     /**
@@ -24,11 +37,16 @@ class Installer implements PluginInterface, EventSubscriberInterface
      *
      * @param Composer    $composer
      * @param IOInterface $io
+     *
+     * @return void
      */
     public function activate(Composer $composer, IOInterface $io)
     {
         $this->composer = $composer;
         $this->io       = $io;
+        $this->auth     = $this->composer->getConfig()->get('wp-packages') ?? [];
+
+        return;
     }
 
     /**
@@ -36,7 +54,7 @@ class Installer implements PluginInterface, EventSubscriberInterface
      *
      * @return array
      */
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents() : array
     {
         return [
             PackageEvents::PRE_PACKAGE_INSTALL => 'getDownloadUrl',
@@ -50,11 +68,11 @@ class Installer implements PluginInterface, EventSubscriberInterface
      *
      * @param OperationInterface $operation
      *
-     * @return mixed
+     * @return ComposerPackageInterface
      */
-    protected function getPackageFromOperation(OperationInterface $operation)
+    protected function getPackageFromOperation(OperationInterface $operation) : ComposerPackageInterface
     {
-        if ('update' === $operation->getJobType()) {
+        if ($operation->getJobType() === 'update') {
             return $operation->getTargetPackage();
         }
 
@@ -68,13 +86,18 @@ class Installer implements PluginInterface, EventSubscriberInterface
      *
      * @return void
      */
-    public function getDownloadUrl(PackageEvent $event) {
-        $package     = $this->getPackageFromOperation($event->getOperation());
-        $packageName = $package->getName();
+    public function getDownloadUrl(PackageEvent $event)
+    {
+        // Get the package and package name
+        $composerPackage     = $this->getPackageFromOperation($event->getOperation());
+        $composerPackageName = $package->getName();
 
-        // @todo Implement a router here.
+        // Set up our representation of the package
+        $package       = new Package($composerPackage);
+        $package->auth = $this->auth[$composerPackageName];
 
-        $this->downloadUrl = $plugin->getDownloadUrl();
+        // Get the download URL for the package.
+        $this->downloadUrl = $package->getDownloadUrl();
 
         return;
     }
@@ -92,9 +115,11 @@ class Installer implements PluginInterface, EventSubscriberInterface
             return;
         }
 
-        // This is where the magic happens to pull in the remote file.
+        // Get the existing remote filesystem representation, so we can
+        // copy some of its properties to our replacement
         $rfs = $event->getRemoteFilesystem();
 
+        // Build a replacement that uses our new download URL
         $customRfs = new RemoteFilesystem(
             $this->downloadUrl,
             $this->io,
@@ -103,7 +128,8 @@ class Installer implements PluginInterface, EventSubscriberInterface
             $rfs->isTlsDisabled()
         );
 
-        $event->setRemoteFilesystem( $customRfs );
+        // Override the previous remote filesystem with our new version
+        $event->setRemoteFilesystem($customRfs);
 
         return;
     }

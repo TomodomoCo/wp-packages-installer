@@ -1,6 +1,6 @@
 <?php
 
-namespace Tomodomo\Packages\Installer;
+namespace Tomodomo\Packages\Installer\Framework;
 
 use Composer\Config;
 use Composer\IO\IOInterface;
@@ -8,7 +8,7 @@ use Composer\IO\IOInterface;
 class RemoteFilesystem extends \Composer\Util\RemoteFilesystem
 {
     /**
-     * Override the original fileUrl.
+     * Override the original file URL
      *
      * @var string
      */
@@ -17,7 +17,6 @@ class RemoteFilesystem extends \Composer\Util\RemoteFilesystem
      /**
       * Constructor.
       *
-      * @access public
       * @param string      $fileUrl    The url that should be used instead of fileurl
       * @param IOInterface $io         The IO instance
       * @param Config      $config     The config

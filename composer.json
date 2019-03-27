@@ -16,5 +16,8 @@
     "psr-4": {
       "Tomodomo\\Packages\\Installer\\": "src"
     }
+  },
+  "extra": {
+    "class": "Tomodomo\\Packages\\Installer\\Plugin"
   }
 }
