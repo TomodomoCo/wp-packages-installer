@@ -102,7 +102,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface
 
         // Set up our representation of the package
         $package       = new Package($composerPackage);
-        $package->auth = $this->auth[$composerPackageName];
+        $package->auth = $this->auth[$composerPackageName] ?? [];
 
         // Get the download URL for the package.
         $this->downloadUrl = $package->getDownloadUrl();

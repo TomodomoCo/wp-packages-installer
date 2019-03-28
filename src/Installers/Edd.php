@@ -60,6 +60,14 @@ class Edd extends AbstractInstaller implements InstallerInterface
      */
     public function getRequestData() : array
     {
+        // Fetch some auth data and confirm it's set.
+        $licenseKey    = $this->auth['licenseKey'] ?? '';
+        $authorizedUrl = $this->auth['authorizedUrl'] ?? '';
+
+        if (empty($licenseKey) ||  empty($authorizedUrl)) {
+            throw new \Exception('You must provide a `licenseKey` and `authorizedUrl`.');
+        }
+
         $data = [
 			'edd_action' => 'get_version',
             'license'    => $this->auth['licenseKey'],
