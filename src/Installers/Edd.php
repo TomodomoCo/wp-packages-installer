@@ -2,6 +2,8 @@
 
 namespace Tomodomo\Packages\Installer\Installers;
 
+use pdeans\Http\Client;
+
 class Edd extends AbstractInstaller implements InstallerInterface
 {
     /**
@@ -15,7 +17,7 @@ class Edd extends AbstractInstaller implements InstallerInterface
         $requestBody = $this->getRequestData();
 
 		// Build a new Guzzle client
-		$http = new \GuzzleHttp\Client();
+		$http = new Client();
 
 		// Send a request to the EDD endpoing
 		$response = $http->request(
@@ -66,7 +68,7 @@ class Edd extends AbstractInstaller implements InstallerInterface
         $licenseKey    = $this->auth['licenseKey'] ?? '';
         $authorizedUrl = $this->auth['authorizedUrl'] ?? '';
 
-        if (empty($licenseKey) ||  empty($authorizedUrl)) {
+        if (empty($licenseKey) || empty($authorizedUrl)) {
             throw new \Exception('You must provide a `licenseKey` and `authorizedUrl`.');
         }
 
@@ -80,7 +82,7 @@ class Edd extends AbstractInstaller implements InstallerInterface
         $itemName = $this->config['itemName'] ?? '';
 
         // An Item ID or Item Name are required
-        if (empty($itemId) || empty($itemName)) {
+        if (empty($itemId) && empty($itemName)) {
             throw new \Exception('No item ID or item name were available.');
         }
 

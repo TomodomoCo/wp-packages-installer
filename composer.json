@@ -3,9 +3,9 @@
   "type": "composer-plugin",
   "version": "1.0.0-beta.1",
   "require": {
-    "guzzlehttp/guzzle": "^6.3",
     "composer-plugin-api": "^1.1",
-    "danielstjules/stringy": "^3.1"
+    "danielstjules/stringy": "^3.1",
+    "pdeans/http": "^1.1"
   },
   "authors": [
     {

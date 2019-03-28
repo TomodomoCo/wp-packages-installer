@@ -9,14 +9,14 @@ abstract class AbstractInstaller
      *
      * @var array
      */
-    private $auth;
+    public $auth;
 
     /**
      * Configuration details from the package repository.
      *
      * @var array
      */
-    private $config;
+    public $config;
 
     /**
      * Instantiate the installation method.
