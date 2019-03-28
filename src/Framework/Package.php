@@ -69,9 +69,9 @@ class Package
         }
 
         // Set up the method class
-        $method = new $classPath($this->auth, $this->config);
+        $installer = new $classPath($this->auth, $this->config);
 
-        return $method;
+        return $installer;
     }
 
     /**
