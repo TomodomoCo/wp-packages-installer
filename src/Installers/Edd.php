@@ -2,7 +2,9 @@
 
 namespace Tomodomo\Packages\Installer\Installers;
 
-use Zttp\Zttp;
+use Buzz\Browser;
+use Buzz\Client\Curl;
+use Nyholm\Psr7\Factory\Psr17Factory;
 
 class Edd extends AbstractInstaller implements InstallerInterface
 {
@@ -16,16 +18,12 @@ class Edd extends AbstractInstaller implements InstallerInterface
 		// Build the request body
         $requestBody = $this->getRequestData();
 
-		// Send a request to the EDD endpoint
-		$response = Zttp::asFormParams()->post(
-			$this->config['endpoint'],
-			$requestBody
-		);
+        // Build the
+        $request = $this::request();
+        $request->submitForm($this->config['endpoint'], $requestBody);
 
 		// Extract the response
-		$body = $response->json();
-
-        var_dump($body);die;
+		$body = json_decode((string) $response->getBody(), true);
 
         // If there is an error message, throw it here
         if ($body['msg'] ?? false) {
@@ -92,5 +90,18 @@ class Edd extends AbstractInstaller implements InstallerInterface
 
         // Return the full data
         return $data;
+    }
+
+    /**
+     * Get a request client.
+     *
+     * @return Browser
+     */
+    public static function request() : Browser
+    {
+        $client  = new Curl(new Psr17Factory());
+        $browser = new Browser($client, new Psr17Factory());
+
+        return $browser;
     }
 }
