@@ -2,10 +2,14 @@
 
 namespace Tomodomo\Packages\Installer\Installers;
 
-use Buzz\Browser;
-use Buzz\Client\Curl;
-use Nyholm\Psr7\Factory\Psr17Factory;
+use Tomodomo\Packages\Installer\Framework\HttpClient;
 
+/**
+ * An installer for plugins sold, licensed, and updated
+ * through Easy Digital Downloads-based websites.
+ * Generates a POST request to the EDD-powered website,
+ * which returns a download URL for the licensed user.
+ */
 class Edd extends AbstractInstaller implements InstallerInterface
 {
     /**
@@ -18,9 +22,9 @@ class Edd extends AbstractInstaller implements InstallerInterface
 		// Build the request body
         $requestBody = $this->getRequestData();
 
-        // Build the
-        $request = $this::request();
-        $request->submitForm($this->config['endpoint'], $requestBody);
+        // Submit the request
+        $request  = HttpClient::request();
+        $response = $request->submitForm($this->config['endpoint'], $requestBody);
 
 		// Extract the response
 		$body = json_decode((string) $response->getBody(), true);
@@ -90,18 +94,5 @@ class Edd extends AbstractInstaller implements InstallerInterface
 
         // Return the full data
         return $data;
-    }
-
-    /**
-     * Get a request client.
-     *
-     * @return Browser
-     */
-    public static function request() : Browser
-    {
-        $client  = new Curl(new Psr17Factory());
-        $browser = new Browser($client, new Psr17Factory());
-
-        return $browser;
     }
 }

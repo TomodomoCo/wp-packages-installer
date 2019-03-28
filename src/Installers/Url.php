@@ -2,7 +2,12 @@
 
 namespace Tomodomo\Packages\Installer\Installers;
 
-class Get extends AbstractInstaller implements InstallerInterface
+/**
+ * An installer type where the URL can be generated
+ * without needing to make additional HTTP requests;
+ * applies a token search/replace on the URL.
+ */
+class Url extends AbstractInstaller implements InstallerInterface
 {
     /**
      * Get the download URL.

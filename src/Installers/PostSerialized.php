@@ -2,8 +2,13 @@
 
 namespace Tomodomo\Packages\Installer\Installers;
 
-use Zttp\Zttp;
+use Tomodomo\Packages\Installer\Framework\HttpClient;
 
+/**
+ * An installer which POSTs to an endpoint and returns
+ * serialized data containing the download URL. Used
+ * primarily for Gravity Forms.
+ */
 class PostSerialized extends AbstractInstaller implements InstallerInterface
 {
     /**
@@ -17,10 +22,11 @@ class PostSerialized extends AbstractInstaller implements InstallerInterface
         $url = static::replace($this->auth, $this->config['endpoint']);
 
 		// Send a request to the endpoint
-		$response = Zttp::asFormParams()->post($url);
+        $request  = HttpClient::request();
+        $response = $request->post($url);
 
 		// Extract and unserialize the response
-		$body = unserialize($response->body());
+		$body = unserialize($response->getBody());
 
         return $body;
     }
