@@ -12,10 +12,9 @@ use Composer\Package\PackageInterface as ComposerPackageInterface;
 use Composer\Plugin\PluginEvents;
 use Composer\Plugin\PluginInterface;
 use Composer\Plugin\PreFileDownloadEvent;
+use Stringy\Stringy as S;
 use Tomodomo\Packages\Installer\Framework\Package;
 use Tomodomo\Packages\Installer\Framework\RemoteFilesystem;
-
-use function Stringy\create as s;
 
 class Plugin implements PluginInterface, EventSubscriberInterface
 {
@@ -108,7 +107,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface
         $composerPackageName = $composerPackage->getName();
 
         // Exit early if we should not act on the package.
-        if (!s($composerPackageName)->startsWith($this::NAMESPACE, false)) {
+        if (!S::create($composerPackageName)->startsWith($this::NAMESPACE, false)) {
             return;
         }
 

@@ -3,6 +3,7 @@
 namespace Tomodomo\Packages\Installer\Framework;
 
 use Composer\Package\PackageInterface as ComposerPackageInterface;
+use Stringy\Stringy as S;
 use Tomodomo\Packages\Installer\Installers\InstallerInterface;
 
 class Package
@@ -45,7 +46,7 @@ class Package
         }
 
         // Transform the method into a fully qualified class path
-        return s($method)
+        return S::create($method)
             ->upperCamelize()
             ->prepend('\\Framework\\')
             ->prepend(__NAMESPACE__);
