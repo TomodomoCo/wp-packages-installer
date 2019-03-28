@@ -96,7 +96,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface
     {
         // Get the package and package name
         $composerPackage     = $this->getPackageFromOperation($event->getOperation());
-        $composerPackageName = $package->getName();
+        $composerPackageName = $composerPackage->getName();
 
         // @todo May need to have a way here to validate that we should act on the package.
 
