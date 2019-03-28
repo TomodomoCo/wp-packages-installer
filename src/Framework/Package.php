@@ -27,7 +27,7 @@ class Package
     private function getInstallerConfig() : array
     {
         // Get the package "extra" details and pull out the config.
-        $extra  = $package->getExtra();
+        $extra  = $this->package->getExtra();
         $config = $extra['wp-packages-installer-config'] ?? [];
 
         return $config;
