@@ -2,7 +2,7 @@
 
 namespace Tomodomo\Packages\Installer\Installers;
 
-use pdeans\Http\Client;
+use Zttp\Zttp;
 
 class Edd extends AbstractInstaller implements InstallerInterface
 {
@@ -16,20 +16,16 @@ class Edd extends AbstractInstaller implements InstallerInterface
 		// Build the request body
         $requestBody = $this->getRequestData();
 
-		// Build a new Guzzle client
-		$http = new Client();
-
-		// Send a request to the EDD endpoing
-		$response = $http->request(
-			'post',
+		// Send a request to the EDD endpoint
+		$response = Zttp::asFormParams()->post(
 			$this->config['endpoint'],
-			[
-				'form_params' => $requestBody,
-			],
+			$requestBody
 		);
 
 		// Extract the response
-		$body = json_decode((string) $response->getBody(), true);
+		$body = $response->json();
+
+        var_dump($body);die;
 
         // If there is an error message, throw it here
         if ($body['msg'] ?? false) {

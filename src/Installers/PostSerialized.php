@@ -2,7 +2,7 @@
 
 namespace Tomodomo\Packages\Installer\Installers;
 
-use pdeans\Http\Client;
+use Zttp\Zttp;
 
 class PostSerialized extends AbstractInstaller implements InstallerInterface
 {
@@ -16,14 +16,11 @@ class PostSerialized extends AbstractInstaller implements InstallerInterface
         // Get the URL and run a replacement with the auth values
         $url = static::replace($this->auth, $this->config['endpoint']);
 
-		// Build a new Guzzle client
-		$http = new Client();
-
 		// Send a request to the endpoint
-		$response = $http->request('post', $url);
+		$response = Zttp::asFormParams()->post($url);
 
 		// Extract and unserialize the response
-		$body = unserialize((string) $response->getBody());
+		$body = unserialize($response->body());
 
         return $body;
     }
