@@ -18,6 +18,13 @@ use Tomodomo\Packages\Installer\Framework\RemoteFilesystem;
 class Plugin implements PluginInterface, EventSubscriberInterface
 {
     /**
+     * The virtual Composer package's namespace.
+     *
+     * @var string
+     */
+    const NAMESPACE = 'wp-packages';
+
+    /**
      * The Composer instance.
      *
      * @var Composer
@@ -98,7 +105,10 @@ class Plugin implements PluginInterface, EventSubscriberInterface
         $composerPackage     = $this->getPackageFromOperation($event->getOperation());
         $composerPackageName = $composerPackage->getName();
 
-        // @todo May need to have a way here to validate that we should act on the package.
+        // Exit early if we should not act on the package.
+        if (!s($composerPackageName)->startsWith($this::NAMESPACE, false)) {
+            return;
+        }
 
         // Set up our representation of the package
         $package       = new Package($composerPackage);
