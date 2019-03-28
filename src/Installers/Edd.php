@@ -5,9 +5,11 @@ namespace Tomodomo\Packages\Installer\Installers;
 class Edd extends AbstractInstaller implements InstallerInterface
 {
     /**
+     * Get the EDD download URL.
+     *
      * @return string
      */
-    public function getDownloadUrl()
+    public function getDownloadUrl() : string
     {
 		// Build the request body
         $requestBody = $this->getRequestData();

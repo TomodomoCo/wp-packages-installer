@@ -48,8 +48,7 @@ class Package
         // Transform the method into a fully qualified class path
         return S::create($method)
             ->upperCamelize()
-            ->prepend('\\Framework\\')
-            ->prepend(__NAMESPACE__);
+            ->prepend('Tomodomo\\Packages\\Installer\\Installers\\');
     }
 
     /**
@@ -70,7 +69,7 @@ class Package
         }
 
         // Set up the method class
-        $installer = new $classPath($this->auth, $this->config);
+        $installer = new $classPath($this->auth, $config);
 
         return $installer;
     }

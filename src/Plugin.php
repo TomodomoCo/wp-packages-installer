@@ -58,7 +58,6 @@ class Plugin implements PluginInterface, EventSubscriberInterface
     {
         $this->composer = $composer;
         $this->io       = $io;
-        $this->auth     = $this->composer->getConfig()->get('wp-packages') ?? [];
 
         return;
     }
@@ -111,9 +110,12 @@ class Plugin implements PluginInterface, EventSubscriberInterface
             return;
         }
 
+        // Fetch the auth for this package
+        $auth = $this->composer->getConfig()->get($composerPackageName) ?? [];
+
         // Set up our representation of the package
         $package       = new Package($composerPackage);
-        $package->auth = $this->auth[$composerPackageName] ?? [];
+        $package->auth = $auth;
 
         // Get the download URL for the package.
         $this->downloadUrl = $package->getDownloadUrl();

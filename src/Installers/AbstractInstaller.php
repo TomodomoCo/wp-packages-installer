@@ -1,9 +1,23 @@
 <?php
 
-namespace Tomodomo\Packages\Installer\Framework;
+namespace Tomodomo\Packages\Installer\Installers;
 
-abstract AbstractInstaller
+abstract class AbstractInstaller
 {
+    /**
+     * Authentication credentials for the package.
+     *
+     * @var array
+     */
+    private $auth;
+
+    /**
+     * Configuration details from the package repository.
+     *
+     * @var array
+     */
+    private $config;
+
     /**
      * Instantiate the installation method.
      *
@@ -14,8 +28,8 @@ abstract AbstractInstaller
      */
     public function __construct(array $auth, array $config)
     {
-        $method->auth   = $auth;
-        $method->config = $config;
+        $this->auth   = $auth;
+        $this->config = $config;
 
         return;
     }
