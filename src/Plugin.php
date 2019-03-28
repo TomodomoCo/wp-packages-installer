@@ -15,6 +15,8 @@ use Composer\Plugin\PreFileDownloadEvent;
 use Tomodomo\Packages\Installer\Framework\Package;
 use Tomodomo\Packages\Installer\Framework\RemoteFilesystem;
 
+use function Stringy\create as s;
+
 class Plugin implements PluginInterface, EventSubscriberInterface
 {
     /**
